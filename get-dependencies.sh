@@ -19,7 +19,10 @@ pacman -Syu --noconfirm \
 echo "Installing the app & it's dependencies..."
 echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
-	newsflash
+	newsflash \
+    gst-plugins-bad \
+	gst-plugin-va \
+	ffmpeg
 
 if [ "$ARCH" = 'x86_64' ]; then
 	echo "Installing 'libva-intel-driver' for older Intel's video HW acceleration"
