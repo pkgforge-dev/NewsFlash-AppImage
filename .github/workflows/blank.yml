@@ -1,0 +1,77 @@
+name: AppImage
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: "0 7 1/21 * *"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    name: "${{ matrix.name }} (${{ matrix.arch }})"
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        include:
+          - runs-on: ubuntu-latest
+            name: Build AppImage
+            arch: x86_64
+          - runs-on: ubuntu-24.04-arm
+            name: Build AppImage
+            arch: aarch64
+    container: ghcr.io/pkgforge-dev/archlinux:latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Get dependencies
+        run: chmod +x ./get-dependencies.sh && ./get-dependencies.sh
+
+      - name: Make AppImage
+        run: chmod +x ./*-appimage.sh && ./*-appimage.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: AppImage-${{ matrix.arch }}
+          path: dist
+
+  release:
+    if: ${{ github.ref_name == 'main' }}
+    needs: [build]
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          pattern: AppImage-*
+          merge-multiple: true
+
+      - name: Read version and Get date
+        run: |
+          cat ./version
+          echo "VERSION=$(cat ./version)" >> "${GITHUB_ENV}"
+          echo "DATE=$(date +'%Y-%m-%d_%s')" >> "${GITHUB_ENV}"
+
+      - name: Release Artifacts
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # v2.3.2
+        with:
+          name: "NewsFlash: ${{ env.VERSION }}"
+          tag_name: "${{ env.VERSION }}@${{ env.DATE }}"
+          prerelease: false
+          draft: false
+          generate_release_notes: false
+          make_latest: true
+          files: |
+            *.AppImage*
+
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Update LATEST_VERSION
+        run: |
+          echo "${{ env.VERSION }}" > ./LATEST_VERSION
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ./LATEST_VERSION
+          git commit --allow-empty -m 'bump `LATEST_VERSION` [skip ci]'
+          git push
