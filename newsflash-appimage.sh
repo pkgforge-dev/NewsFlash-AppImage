@@ -29,7 +29,7 @@ fi
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 wget --retry-connrefused --tries=30 "$SHARUN" -O ./quick-sharun
 chmod +x ./quick-sharun
-./quick-sharun /usr/bin/newsflash /usr/bin/xdg-dbus-proxy /usr/bin/bwrap
+./quick-sharun /usr/bin/newsflash /usr/bin/xdg-dbus-proxy
 
 # workaround weird issue for now
 cp -r ./AppDir/shared/lib ./lib
