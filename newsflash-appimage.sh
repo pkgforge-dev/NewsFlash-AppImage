@@ -29,7 +29,7 @@ fi
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 wget --retry-connrefused --tries=30 "$SHARUN" -O ./quick-sharun
 chmod +x ./quick-sharun
-./quick-sharun /usr/bin/newsflash /usr/bin/xdg-dbus-proxy
+./quick-sharun /usr/bin/newsflash /usr/bin/xdg-dbus-proxy /usr/lib/gio/modules/libgiognutls.so*
 
 ## Set gsettings to save to keyfile, instead to dconf
 echo "GSETTINGS_BACKEND=keyfile" >> ./AppDir/.env
