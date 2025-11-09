@@ -31,12 +31,6 @@ wget --retry-connrefused --tries=30 "$SHARUN" -O ./quick-sharun
 chmod +x ./quick-sharun
 ./quick-sharun /usr/bin/newsflash /usr/bin/xdg-dbus-proxy
 
-# workaround weird issue for now
-cp -r ./AppDir/shared/lib ./lib
-mkdir -p ./AppDir/shared/lib/webkitgtk-6.0/shared
-mv ./lib ./AppDir/shared/lib/webkitgtk-6.0/shared
-cp -r ./AppDir/shared/bin ./AppDir/shared/lib/webkitgtk-6.0/shared
-
 ## Set gsettings to save to keyfile, instead to dconf
 echo "GSETTINGS_BACKEND=keyfile" >> ./AppDir/.env
 
