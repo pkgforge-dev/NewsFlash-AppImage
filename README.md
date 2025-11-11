@@ -3,6 +3,10 @@
 [![GitHub Downloads](https://img.shields.io/github/downloads/pkgforge-dev/NewsFlash-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pkgforge-dev/NewsFlash-AppImage/releases/latest)
 [![CI Build Status](https://github.com//pkgforge-dev/NewsFlash-AppImage/actions/workflows/blank.yml/badge.svg)](https://github.com/pkgforge-dev/NewsFlash-AppImage/releases/latest)
 
+<p align="center">
+  <img src="https://gitlab.com/news-flash/news_flash_gtk/-/raw/main/data/icons/hicolor/io.gitlab.news_flash.NewsFlash.svg?ref_type=heads" />
+</p>
+
 * [Latest Stable Release](https://github.com/pkgforge-dev/NewsFlash-AppImage/releases/latest)
 
 ---
