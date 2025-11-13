@@ -31,9 +31,6 @@ wget --retry-connrefused --tries=30 "$SHARUN" -O ./quick-sharun
 chmod +x ./quick-sharun
 ./quick-sharun /usr/bin/newsflash /usr/bin/xdg-dbus-proxy /usr/lib/gio/modules/libgiognutls.so*
 
-## Set gsettings to save to keyfile, instead to dconf
-echo "GSETTINGS_BACKEND=keyfile" >> ./AppDir/.env
-
 # Make the AppImage with uruntime
 ./quick-sharun --make-appimage
 
