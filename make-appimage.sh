@@ -12,7 +12,8 @@ export ICON=/usr/share/icons/hicolor/scalable/apps/io.gitlab.news_flash.NewsFlas
 export DESKTOP=/usr/share/applications/io.gitlab.news_flash.NewsFlash.desktop
 export DEPLOY_OPENGL=1
 export DEPLOY_GSTREAMER=1
-export STARTUPWMCLASS=newsflash # For Wayland, this is 'io.gitlab.news_flash.NewsFlash', so this needs to be changed in desktop file manually by the user in that case until some potential automatic fix exists for this
+export STARTUPWMCLASS=newsflash
+export GTK_CLASS_FIX=1
 
 ## This app uses libclapper for video playback, so this is needed
 sys_clapper_dir=$(echo /usr/lib/clapper-*)
