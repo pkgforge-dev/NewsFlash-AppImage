@@ -12,7 +12,6 @@ export ICON=/usr/share/icons/hicolor/scalable/apps/io.gitlab.news_flash.NewsFlas
 export DESKTOP=/usr/share/applications/io.gitlab.news_flash.NewsFlash.desktop
 export DEPLOY_OPENGL=1
 export DEPLOY_GSTREAMER=1
-export STARTUPWMCLASS=newsflash
 export GTK_CLASS_FIX=1
 
 ## This app uses libclapper for video playback, so this is needed
