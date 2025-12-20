@@ -12,6 +12,7 @@ export ICON=/usr/share/icons/hicolor/scalable/apps/io.gitlab.news_flash.NewsFlas
 export DESKTOP=/usr/share/applications/io.gitlab.news_flash.NewsFlash.desktop
 export DEPLOY_OPENGL=1
 export DEPLOY_GSTREAMER=1
+export STARTUPWMCLASS=io.gitlab.news_flash.NewsFlash # Default to Wayland's wmclass. For X11, GTK_CLASS_FIX will force the wmclass to be the Wayland one.
 export GTK_CLASS_FIX=1
 
 ## This app uses libclapper for video playback, so this is needed
