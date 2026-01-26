@@ -1,3 +1,5 @@
+<div align="center">
+
 # NewsFlash AppImage 🐧
 
 [![GitHub Downloads](https://img.shields.io/github/downloads/pkgforge-dev/NewsFlash-AppImage/total?logo=github&label=GitHub%20Downloads)](https://github.com/pkgforge-dev/NewsFlash-AppImage/releases/latest)
@@ -8,7 +10,11 @@
   <img src="https://gitlab.com/news-flash/news_flash_gtk/-/raw/main/data/icons/hicolor/io.gitlab.news_flash.NewsFlash.svg?ref_type=heads" width="128" />
 </p>
 
-* [Upstream URL](https://gitlab.com/news-flash/news_flash_gtk)
+| Latest Stable Release | Upstream URL |
+| :---: | :---: |
+| [Click here](https://github.com/pkgforge-dev/NewsFlash-AppImage/releases/latest) | [Click here](https://gitlab.com/news-flash/news_flash_gtk) |
+
+</div>
 
 ---
 
