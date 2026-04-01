@@ -27,7 +27,6 @@ fi
 
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 quick-sharun /usr/bin/newsflash \
-             /usr/bin/xdg-dbus-proxy \
              /usr/lib/gio/modules/libgiognutls.so*
 
 # Turn AppDir into AppImage
