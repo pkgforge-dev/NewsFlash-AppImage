@@ -37,3 +37,10 @@ There is also a prompt and config for opting-out of self-updates if desired.
 ---
 
 More at: [AnyLinux-AppImages](https://pkgforge-dev.github.io/Anylinux-AppImages/)
+
+## Known quirk
+- Autostart option in settings doesn't work
+  - To fix this, enter this command in terminal once:  
+    `/path/to/newsflash-appimage --appimage-add-env APPIMAGE_NEWSFLASH_AUTOSTART=1`  
+    which will add the persisting `APPIMAGE_NEWSFLASH_AUTOSTART=1` variable to the AppImage env file,  
+    which further triggers creating the autostart entry automatically on every launch
