@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "${APPIMAGE_NEWSFLASH_AUTOSTART:-0}" = 1 ]; then
+	mkdir -p "${HOST_XDG_CONFIG_HOME}/autostart"
+	echo "[Desktop Entry]
+Type=Application
+Name=Newsflash
+Exec=$APPIMAGE --headless
+X-GNOME-Autostart-enabled=true" > "${HOST_XDG_CONFIG_HOME}/autostart/newsflash-appimage.desktop"
+fi
