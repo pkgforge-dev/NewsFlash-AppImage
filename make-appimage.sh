@@ -19,12 +19,6 @@ export USE_HOST_DRIVERS_EXPERIMENTAL=1
 ## This app uses libclapper for video playback, so the clapper lib dir is deployed
 clapper_dir=$(echo /usr/lib/clapper-*)
 
-# libpeas resolves its plugin loaders from a hardcoded absolute path,
-# map it so the python loader (used by the yt-dlp enhancer) is found
-export PATH_MAPPING="
-	/usr/lib/libpeas-2/loaders:\${SHARUN_DIR}/lib/libpeas-2/loaders
-"
-
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 quick-sharun /usr/bin/newsflash \
              "$clapper_dir" \
