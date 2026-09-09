@@ -11,23 +11,31 @@ export UPINFO="gh-releases-zsync|${GITHUB_REPOSITORY%/*}|${GITHUB_REPOSITORY#*/}
 export ICON=/usr/share/icons/hicolor/scalable/apps/io.gitlab.news_flash.NewsFlash.svg
 export DESKTOP=/usr/share/applications/io.gitlab.news_flash.NewsFlash.desktop
 export DEPLOY_GSTREAMER=1
+export DEPLOY_PYTHON=1
 export STARTUPWMCLASS=io.gitlab.news_flash.NewsFlash # Default to Wayland's wmclass. For X11, GTK_CLASS_FIX will force the wmclass to be the Wayland one.
 export GTK_CLASS_FIX=1
 
-## This app uses libclapper for video playback, so this is needed
-sys_clapper_dir=$(echo /usr/lib/clapper-*)
-if [ -d "$sys_clapper_dir" ]; then
-	export PATH_MAPPING="
-		$sys_clapper_dir:\${SHARUN_DIR}/lib/${sys_clapper_dir##*/}
-	"
-else
-	>&2 echo "ERROR: Cannot find the clapper lib dir"
-	exit 1
-fi
+## This app uses libclapper for video playback, so the clapper lib dir is deployed
+clapper_dir=$(echo /usr/lib/clapper-*)
+
+# libpeas resolves its plugin loaders from a hardcoded absolute path,
+# map it so the python loader (used by the yt-dlp enhancer) is found
+export PATH_MAPPING="
+	/usr/lib/libpeas-2/loaders:\${SHARUN_DIR}/lib/libpeas-2/loaders
+"
 
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 quick-sharun /usr/bin/newsflash \
-             /usr/lib/gio/modules/libgiognutls.so*
+             "$clapper_dir" \
+             /usr/bin/yt-dlp \
+             /usr/bin/qjs \
+             /usr/lib/gio/modules/libgiognutls.so* \
+             /usr/lib/libpeas-2/loaders
+
+# Ensure the patched clapper importers (incl. the DMABuf fix) and enhancers
+# (yt-dlp based HTML page/media URL resolution) are found inside the AppImage
+echo "CLAPPER_SINK_IMPORTER_PATH=\${SHARUN_DIR}/lib/${clapper_dir##*/}/gst/plugin/importers" >> ./AppDir/.env
+echo "CLAPPER_ENHANCERS_PATH=\${SHARUN_DIR}/lib/${clapper_dir##*/}/enhancers" >> ./AppDir/.env
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
