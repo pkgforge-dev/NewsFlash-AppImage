@@ -16,10 +16,6 @@ export GTK_CLASS_FIX=1
 
 ## This app uses libclapper for video playback, so the clapper lib dir is deployed
 clapper_dir=$(echo /usr/lib/clapper-*)
-if [ ! -d "$clapper_dir" ]; then
-	>&2 echo "ERROR: Cannot find the clapper lib dir"
-	exit 1
-fi
 
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 quick-sharun /usr/bin/newsflash \
