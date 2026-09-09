@@ -9,7 +9,12 @@ echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
 	git              \
 	glib2-devel      \
+	gst-libav        \
+	gst-plugin-va    \
+	gst-plugins-bad  \
 	gst-plugins-base \
+	gst-plugins-good \
+	gst-plugins-ugly \
 	gstreamer        \
 	gtk4             \
 	meson            \
