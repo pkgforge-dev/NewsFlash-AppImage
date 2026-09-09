@@ -21,9 +21,10 @@ clapper_dir=$(echo /usr/lib/clapper-*)
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 quick-sharun /usr/bin/newsflash \
              "$clapper_dir" \
+             /usr/bin/yt-dlp \
              /usr/bin/qjs \
              /usr/lib/gio/modules/libgiognutls.so* \
-             /usr/lib/libpeas-2/loaders/*
+             /usr/lib/libpeas-2/loaders
 
 # Ensure the patched clapper importers (incl. the DMABuf fix) and enhancers
 # (yt-dlp based HTML page/media URL resolution) are found inside the AppImage

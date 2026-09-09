@@ -24,8 +24,7 @@ pacman -Syu --noconfirm \
 	ninja               \
 	python              \
 	python-cairo        \
-	python-gobject      \
-	yt-dlp
+	python-gobject
 
 # newsflash pulls in the (unpatched) system libclapper/libclapper-gtk packages,
 # remove them so our patched build below is the only source of these libs
@@ -91,6 +90,17 @@ git clone https://github.com/bellard/quickjs ./quickjs && (
 	make -s
 	make -s install PREFIX=/usr
 )
+
+# Build yt-dlp and its dependencies since archlinuxarm is insanely out of date
+# remove deno dependency since we are going to use quickjs
+# npm is needed to build yt-dlp-ejs (it requires a JS package manager)
+echo "Building yt-dlp..."
+echo "---------------------------------------------------------------"
+pacman -S --noconfirm npm
+export PRE_BUILD_CMDS="sed -i -e 's|deno||g' ./PKGBUILD"
+make-aur-package --archlinux-pkg yt-dlp-ejs
+make-aur-package --archlinux-pkg yt-dlp
+unset PRE_BUILD_CMDS
 
 # Make yt-dlp use quickjs instead of the default deno runtime
 sed -i -e "s|default=\['deno'\]|default=['quickjs']|" /usr/lib/python*/site-packages/yt_dlp/options.py
