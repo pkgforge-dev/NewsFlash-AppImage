@@ -21,6 +21,7 @@ clapper_dir=$(echo /usr/lib/clapper-*)
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 quick-sharun /usr/bin/newsflash \
              "$clapper_dir" \
+             /usr/bin/qjs \
              /usr/lib/gio/modules/libgiognutls.so* \
              /usr/lib/libpeas-2/loaders/*
 

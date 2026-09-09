@@ -81,3 +81,18 @@ git clone https://github.com/Rafostar/clapper-enhancers ./clapper-enhancers && (
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
 get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini
+
+# yt-dlp uses a JS runtime to solve site challenges (e.g. YouTube). Deno is
+# the default, but we use quickjs instead as it is much smaller.
+echo "Building quickjs..."
+echo "---------------------------------------------------------------"
+git clone https://github.com/bellard/quickjs ./quickjs && (
+	cd ./quickjs
+	make -s
+	make -s install PREFIX=/usr
+)
+
+# Make yt-dlp use quickjs instead of the default deno runtime
+sed -i -e "s|default=\['deno'\]|default=['quickjs']|" /usr/lib/python*/site-packages/yt_dlp/options.py
+# clapper-enhancers uses yt-dlp as a library, so patch the library default too
+sed -i -e "s|self.params.get('js_runtimes', {'deno': {}})|self.params.get('js_runtimes', {'quickjs': {}})|" /usr/lib/python*/site-packages/yt_dlp/YoutubeDL.py
