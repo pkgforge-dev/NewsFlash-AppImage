@@ -1,0 +1,47 @@
+diff --git a/src/lib/gst/plugin/importers/gstclappergluploader.c b/src/lib/gst/plugin/importers/gstclappergluploader.c
+index 77ea67f..0d87320 100644
+--- a/src/lib/gst/plugin/importers/gstclappergluploader.c
++++ b/src/lib/gst/plugin/importers/gstclappergluploader.c
+@@ -20,6 +20,8 @@
+ #include "config.h"
+ #endif
+ 
++#include <gst/allocators/gstdmabuf.h>
++
+ #include "gstclappergluploader.h"
+ 
+ #define GST_CAT_DEFAULT gst_clapper_gl_uploader_debug
+@@ -55,6 +57,15 @@ _update_elements_caps_locked (GstClapperGLUploader *self, GstCaps *upload_sink_c
+   color_src_caps = gst_gl_color_convert_fixate_caps (gst_context,
+       GST_PAD_SINK, upload_src_caps, color_sink_caps);
+ 
++  if (G_UNLIKELY (!color_src_caps || gst_caps_is_empty (color_src_caps))) {
++    GST_WARNING_OBJECT (self, "Cannot color convert %" GST_PTR_FORMAT,
++        upload_src_caps);
++    gst_caps_unref (upload_src_caps);
++    gst_clear_caps (&color_src_caps);
++
++    return;
++  }
++
+   GST_INFO_OBJECT (self, "GLColorConvert caps: %" GST_PTR_FORMAT, color_src_caps);
+   gst_gl_color_convert_set_caps (self->color_convert, upload_src_caps, color_src_caps);
+ 
+@@ -284,8 +295,17 @@ _make_actual_caps (GstClapperGLContextHandler *gl_handler)
+    * they may contain unsupported by our GL context formats */
+   actual = gst_caps_new_empty ();
+   for (i = 0; i < gst_caps_get_size (upload_sink_caps); i++) {
++    const GstCapsFeatures *features;
+     GstCaps *tmp = gst_caps_copy_nth (upload_sink_caps, i);
+ 
++    /* Direct DMABuf upload keeps the DMABuf memory, which cannot be
++     * color converted to the GDK GL caps, so do not negotiate it */
++    features = gst_caps_get_features (upload_sink_caps, i);
++    if (gst_caps_features_contains (features, GST_CAPS_FEATURE_MEMORY_DMABUF)) {
++      gst_caps_unref (tmp);
++      continue;
++    }
++
+     if (!gst_caps_can_intersect (actual, tmp))
+       gst_caps_append (actual, tmp);
+     else

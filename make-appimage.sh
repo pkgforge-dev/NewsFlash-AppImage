@@ -14,20 +14,20 @@ export DEPLOY_GSTREAMER=1
 export STARTUPWMCLASS=io.gitlab.news_flash.NewsFlash # Default to Wayland's wmclass. For X11, GTK_CLASS_FIX will force the wmclass to be the Wayland one.
 export GTK_CLASS_FIX=1
 
-## This app uses libclapper for video playback, so this is needed
-sys_clapper_dir=$(echo /usr/lib/clapper-*)
-if [ -d "$sys_clapper_dir" ]; then
-	export PATH_MAPPING="
-		$sys_clapper_dir:\${SHARUN_DIR}/lib/${sys_clapper_dir##*/}
-	"
-else
+## This app uses libclapper for video playback, so the clapper lib dir is deployed
+clapper_dir=$(echo /usr/lib/clapper-*)
+if [ ! -d "$clapper_dir" ]; then
 	>&2 echo "ERROR: Cannot find the clapper lib dir"
 	exit 1
 fi
 
 # Trace and deploy all files and directories needed for the application (including binaries, libraries and others)
 quick-sharun /usr/bin/newsflash \
+             "$clapper_dir" \
              /usr/lib/gio/modules/libgiognutls.so*
+
+# Ensure the patched clapper importers (incl. the DMABuf fix) are found inside the AppImage
+echo "CLAPPER_SINK_IMPORTER_PATH=\${SHARUN_DIR}/lib/${clapper_dir##*/}/gst/plugin/importers" >> ./AppDir/.env
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
