@@ -58,4 +58,4 @@ git clone https://github.com/Rafostar/clapper ./clapper && (
 
 echo "Installing debloated packages..."
 echo "---------------------------------------------------------------"
-get-debloated-pkgs --add-common --prefer-nano
+get-debloated-pkgs --add-common --prefer-nano ffmpeg-mini
