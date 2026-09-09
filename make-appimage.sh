@@ -14,6 +14,7 @@ export DEPLOY_GSTREAMER=1
 export DEPLOY_PYTHON=1
 export STARTUPWMCLASS=io.gitlab.news_flash.NewsFlash # Default to Wayland's wmclass. For X11, GTK_CLASS_FIX will force the wmclass to be the Wayland one.
 export GTK_CLASS_FIX=1
+export USE_HOST_DRIVERS_EXPERIMENTAL=1
 
 ## This app uses libclapper for video playback, so the clapper lib dir is deployed
 clapper_dir=$(echo /usr/lib/clapper-*)
