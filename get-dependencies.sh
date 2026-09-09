@@ -9,6 +9,7 @@ echo "---------------------------------------------------------------"
 pacman -Syu --noconfirm \
 	git                 \
 	glib2-devel         \
+	gobject-introspection \
 	gst-libav           \
 	gst-plugin-va       \
 	gst-plugins-bad     \
@@ -17,9 +18,14 @@ pacman -Syu --noconfirm \
 	gst-plugins-ugly    \
 	gstreamer           \
 	gtk4                \
+	libpeas-2           \
 	meson               \
 	newsflash           \
-	ninja
+	ninja               \
+	python              \
+	python-cairo        \
+	python-gobject      \
+	yt-dlp
 
 # newsflash pulls in the (unpatched) system libclapper/libclapper-gtk packages,
 # remove them so our patched build below is the only source of these libs
@@ -37,20 +43,36 @@ git clone https://github.com/Rafostar/clapper ./clapper && (
 	git apply ../patches/*.patch
 
 	meson setup build --prefix=/usr --libdir=lib --buildtype=release \
-		-D clapper=enabled           \
-		-D clapper-gtk=enabled       \
-		-D clapper-app=disabled      \
-		-D gst-plugin=enabled        \
-		-D gluploader=enabled        \
-		-D glimporter=enabled        \
-		-D rawimporter=enabled       \
-		-D enhancers-loader=disabled \
-		-D discoverer=disabled       \
-		-D mpris=disabled            \
-		-D server=disabled           \
-		-D introspection=disabled    \
-		-D vapi=disabled             \
+		-D clapper=enabled          \
+		-D clapper-gtk=enabled      \
+		-D clapper-app=disabled     \
+		-D gst-plugin=enabled       \
+		-D gluploader=enabled       \
+		-D glimporter=enabled       \
+		-D rawimporter=enabled      \
+		-D enhancers-loader=enabled \
+		-D discoverer=disabled      \
+		-D mpris=disabled           \
+		-D server=disabled          \
+		-D introspection=enabled    \
+		-D vapi=disabled            \
 		-D doc=false
+
+	meson compile -C build
+	meson install -C build
+)
+
+echo "Building Clapper Enhancers (yt-dlp support)..."
+echo "---------------------------------------------------------------"
+git clone https://github.com/Rafostar/clapper-enhancers ./clapper-enhancers && (
+	cd ./clapper-enhancers
+
+	git fetch --tags origin
+	TAG=$(git tag --sort=-v:refname | grep -vi 'rc\|alpha\|beta' | head -1)
+	git checkout "$TAG"
+
+	meson setup build --prefix=/usr --libdir=lib --buildtype=release \
+		-D enhancersdir=/usr/lib/clapper-0.0/enhancers
 
 	meson compile -C build
 	meson install -C build
